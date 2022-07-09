@@ -1,0 +1,37 @@
+{
+  "name": "cucumber-formatter-teamcity",
+  "version": "1.0.0",
+  "description": "TeamCity formatter for Cucumber",
+  "main": "dist/cucumber-formatter-teamcity.js",
+  "scripts": {
+    "build": "npx babel src --out-dir dist",
+    "start": "npx babel src --watch --out-dir dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RockMinsk/cucumber-formatter-teamcity.git"
+  },
+  "keywords": [
+    "cucumber",
+    "teamcity",
+    "formatter"
+  ],
+  "author": "Kiryl Shytsikau",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RockMinsk/cucumber-formatter-teamcity/issues"
+  },
+  "homepage": "https://github.com/RockMinsk/cucumber-formatter-teamcity#readme",
+  "engines": {
+    "node": "12 || 14 || >=16"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.18.6",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@cucumber/cucumber": "^8.4.0"
+  },
+  "peerDependencies": {
+    "@cucumber/cucumber": ">= 7"
+  }
+}
