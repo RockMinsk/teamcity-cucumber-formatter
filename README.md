@@ -52,8 +52,9 @@ You have possibility
 To have possibility to link and publish artifacts you need to use the following environment variables (set appropriate values):
 
 * `TEAMCITY_CUCUMBER_PATH_TO_SCREENSHOTS` - set a relative path (from project root, e.g. `./test_artifacts/screenshots`) to local directory where screenshots are stored.
-* `TEAMCITY_CUCUMBER_SCREENSHOT_NAME` - set a custom name.extension value of the saved screenshot (e.g. `TIMESTAMP_TEST_NAME.png`). You can do it in `After` hook for each failed test. Don't set it if your screenshot has the same name as a test and you use `png` format (e.g. `TEST_NAME.png`).
-* `TEAMCITY_CUCUMBER_PUBLISH_ARTIFACTS_RUNTIME` - set this variable (e.g. use `true` value) if you want to publish artifacts while TeamCity build is running. Don't set it if you save screenshots directly in Artifacts.
+* `TEAMCITY_CUCUMBER_SCREENSHOT_NAME` (optional) - set a name of saved screenshot (e.g. `TIMESTAMP_TEST_NAME`). You can do it in `After` hook for each failed test. By default a `pickle.name` value is used.
+* `TEAMCITY_CUCUMBER_SCREENSHOT_EXTENSION` - set an extension of saved screenshot. Be default a `png` format is used.
+* `TEAMCITY_CUCUMBER_PUBLISH_ARTIFACTS_RUNTIME` - set this variable (e.g. use `true` value) if you want to publish artifacts while TeamCity build is running.
 * `TEAMCITY_CUCUMBER_ARTIFACTS_SUB_FOLDER` - set this variable if some subfolder for screenshots is used inside the TeamCity artifacts storage (e.g. `screenshots`). Don't set it if you save screenshots directly in Artifacts.
 
 | Example of TeamCity artifacts subdirectories |
