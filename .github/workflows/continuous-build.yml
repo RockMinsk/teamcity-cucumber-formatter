@@ -23,5 +23,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Clone cucumber-teamcity-formatter
         uses: actions/checkout@v3
+      - name: Install app
+        run: npm install
       - name: Run a build
         run: npm run build
