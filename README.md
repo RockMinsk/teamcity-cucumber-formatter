@@ -8,7 +8,7 @@
 ## Install
 
 ```sh
-$ npm install teamcity-cucumber-formatte --save-dev
+$ npm install teamcity-cucumber-formatter --save-dev
 ```
 
 ## Usage
