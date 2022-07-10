@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/cucumber-formatter-teamcity.svg)](https://www.npmjs.com/package/cucumber-formatter-teamcity)
 [![Build Status](https://github.com/RockMinsk/cucumber-formatter-teamcity/actions/workflows/continuous-build.yml/badge.svg)](https://github.com/RockMinsk/cucumber-formatter-teamcity/actions/workflows/continuous-build.yml)
 
-> Cucumber formatter for TeamCity
+> TeamCity formatter for @cucumber/cucumber npm package
 
 ## Install
 
