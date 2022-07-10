@@ -1,10 +1,11 @@
 import { Formatter, Status, formatterHelpers } from '@cucumber/cucumber';
-import * as path from 'path';
+import path from 'path';
 
-export class TeamCityFormatter extends Formatter {
+let storedFeatureName: string = ``;
+
+export default class TeamCityFormatter extends Formatter {
     constructor(options) {
         super(options);
-        this.storedFeatureName = ``;
 
         options.eventBroadcaster.on('envelope', (envelope) => {
             if (envelope.testCaseStarted) {
@@ -14,29 +15,29 @@ export class TeamCityFormatter extends Formatter {
                 this.logTestCaseFinished(envelope.testCaseFinished.testCaseStartedId)
             }
             if (envelope.testRunFinished) {
-                this.log(`##teamcity[testSuiteFinished name='${this.storedFeatureName}']\n`);
+                this.log(`##teamcity[testSuiteFinished name='${storedFeatureName}']\n`);
             }
         });
     }
 
-    logTestSuiteChanged(currentFeature) {
-        if (currentFeature.name !== this.storedFeatureName) {
-            if (this.storedFeatureName) {
-                this.log(`##teamcity[testSuiteFinished name='${this.storedFeatureName}']\n`);
+    logTestSuiteChanged(currentFeature): void {
+        if (currentFeature.name !== storedFeatureName) {
+            if (storedFeatureName) {
+                this.log(`##teamcity[testSuiteFinished name='${storedFeatureName}']\n`);
             }
             this.log(`##teamcity[testSuiteStarted name='${this.escape(currentFeature.name)}']\n`);
-            this.storedFeatureName = currentFeature.name;
+            storedFeatureName = currentFeature.name;
         }
     }
 
-    logTestCaseStarted(id) {
+    logTestCaseStarted(id): void {
         const { gherkinDocument: { feature: currentFeature }, pickle: { name: pickleName} } = this.eventDataCollector.getTestCaseAttempt(id);
 
         this.logTestSuiteChanged(currentFeature);
         this.log(`##teamcity[testStarted name='${this.escape(pickleName)}' captureStandardOutput='true']\n`);
     }
 
-    logTestCaseFinished(testCaseStartedId) {
+    logTestCaseFinished(testCaseStartedId): void {
         const testCaseAttempt = this.eventDataCollector.getTestCaseAttempt(testCaseStartedId);
         const { pickle: { name: pickleName}, stepResults: currentStepResults } = testCaseAttempt;
 
@@ -56,7 +57,7 @@ export class TeamCityFormatter extends Formatter {
         this.logTestFinished(pickleName, testCaseDurationInSeconds);
     }
 
-    logTestFailed(pickleName, testCaseAttempt, stepStatus) {
+    logTestFailed(pickleName, testCaseAttempt, stepStatus): void {
         const details = formatterHelpers.formatIssue({
             colorFns: this.colorFns,
             number: 1,
@@ -68,22 +69,25 @@ export class TeamCityFormatter extends Formatter {
         this.log(`##teamcity[testFailed name='${this.escape(pickleName)}' message='${this.escape(pickleName + ' ' + stepStatus)}' details='${this.escape(details)}']\n`);
     }
 
-    logArtifacts(pickleName) {
-        if (process.env.CUCUMBER_TEAMCITY_LOCAL_SCREENSHOT_DIR && process.env.CUCUMBER_TEAMCITY_SCREENSHOT_NAME) {
-            const pathToScreenshot = path.resolve(process.env.CUCUMBER_TEAMCITY_LOCAL_SCREENSHOT_DIR, process.env.CUCUMBER_TEAMCITY_SCREENSHOT_NAME);
-            const artifactsPathPostfix = process.env.CUCUMBER_TEAMCITY_ARTIFACTS_SUBDIR ? ` => ${process.env.CUCUMBER_TEAMCITY_ARTIFACTS_SUBDIR}` : ``;
-            this.log(`##teamcity[publishArtifacts '${this.escape(pathToScreenshot + artifactsPathPostfix)}']\n`);
-            const artifactsSubFolder = process.env.CUCUMBER_TEAMCITY_ARTIFACTS_SUBDIR ? `${process.env.CUCUMBER_TEAMCITY_ARTIFACTS_SUBDIR}/` : ``;
-            this.log(`##teamcity[testMetadata type='image' name='${this.escape(pickleName)}' value='${this.escape(artifactsSubFolder + process.env.CUCUMBER_TEAMCITY_SCREENSHOT_NAME)}']\n`);
+    logArtifacts(pickleName): void {
+        if (process.env.TEAMCITY_CUCUMBER_PATH_TO_SCREENSHOTS) {
+            const screeshotName: string = process.env.TEAMCITY_CUCUMBER_SCREENSHOT_NAME ? process.env.TEAMCITY_CUCUMBER_SCREENSHOT_NAME : `${pickleName}.png`;
+            const pathToScreenshot: string = path.resolve(process.env.TEAMCITY_CUCUMBER_PATH_TO_SCREENSHOTS, screeshotName);
+            if (process.env.TEAMCITY_CUCUMBER_PUBLISH_ARTIFACTS_RUNTIME) {
+                const artifactsPathPostfix: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR ? ` => ${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR}` : ``;
+                this.log(`##teamcity[publishArtifacts '${this.escape(pathToScreenshot + artifactsPathPostfix)}']\n`);
+            }
+            const artifactsSubFolder: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR ? `${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR}/` : ``;
+            this.log(`##teamcity[testMetadata type='image' name='${this.escape(pickleName)}' value='${this.escape(artifactsSubFolder + screeshotName)}']\n`);
         }
 
     }
 
-    logTestFinished(pickleName, durationInSeconds) {
+    logTestFinished(pickleName, durationInSeconds): void {
         this.log(`##teamcity[testFinished name='${this.escape(pickleName)}' duration='${durationInSeconds}']\n`);
     }
 
-    escape(text) {
+    escape(text): string {
         return text
             .replace(/\|/g, '||')
             .replace(/'/g, '|\'')
