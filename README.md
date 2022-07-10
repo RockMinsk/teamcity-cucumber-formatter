@@ -18,13 +18,13 @@ There are 2 ways to use teamcity-cucumber-formatter as described [here](https://
 ### 1. On the CLI:
 
 ```sh
-$ cucumber-js --format node_modules/teamcity-cucumber-formatter
+$ cucumber-js --format ./node_modules/teamcity-cucumber-formatter
 ```
 
 ### 2. In a configuration file:
 
-```sh
-{ format: node_modules/teamcity-cucumber-formatter }
+```javascript
+{ format: './node_modules/teamcity-cucumber-formatter' }
 ```
 
 ### Note:
@@ -35,7 +35,7 @@ If you need to use teamcity-cucumber-formatter only on CI, you can specify it in
         `json:${pathToCucumberJsonReport}`,
         `summary`,
         `progress-bar`,
-        ...(process.env.CI ? [`node_modules/teamcity-cucumber-formatter`] : [])
+        ...(process.env.CI ? [path.resolve('node_modules', 'teamcity-cucumber-formatter')] : [])
     ],
 ```
 
