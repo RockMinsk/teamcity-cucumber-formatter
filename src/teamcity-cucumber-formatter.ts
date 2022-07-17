@@ -75,10 +75,10 @@ export default class TeamCityFormatter extends Formatter {
             const screenshotExtension: string = process.env.TEAMCITY_CUCUMBER_SCREENSHOT_EXTENSION ? process.env.TEAMCITY_CUCUMBER_SCREENSHOT_EXTENSION : `png`;
             const pathToScreenshot: string = path.resolve(process.env.TEAMCITY_CUCUMBER_PATH_TO_SCREENSHOTS, `${screeshotName}.${screenshotExtension}`);
             if (process.env.TEAMCITY_CUCUMBER_PUBLISH_ARTIFACTS_RUNTIME) {
-                const artifactsPathPostfix: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR ? ` => ${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR}` : ``;
+                const artifactsPathPostfix: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUB_FOLDER ? ` => ${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUB_FOLDER}` : ``;
                 this.log(`##teamcity[publishArtifacts '${this.escape(pathToScreenshot + artifactsPathPostfix)}']\n`);
             }
-            const artifactsSubFolder: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR ? `${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUBDIR}/` : ``;
+            const artifactsSubFolder: string = process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUB_FOLDER ? `${process.env.TEAMCITY_CUCUMBER_ARTIFACTS_SUB_FOLDER}/` : ``;
             this.log(`##teamcity[testMetadata type='image' name='${this.escape(pickleName)}' value='${this.escape(artifactsSubFolder + `${screeshotName}.${screenshotExtension}`)}']\n`);
         }
 
