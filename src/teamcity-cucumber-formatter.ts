@@ -25,8 +25,8 @@ export default class TeamCityFormatter extends Formatter {
             if (storedFeatureName) {
                 this.log(`##teamcity[testSuiteFinished name='${storedFeatureName}']\n`);
             }
-            this.log(`##teamcity[testSuiteStarted name='${this.escape(currentFeature.name)}']\n`);
-            storedFeatureName = currentFeature.name;
+            storedFeatureName = this.escape(currentFeature.name);
+            this.log(`##teamcity[testSuiteStarted name='${storedFeatureName}']\n`);
         }
     }
 
