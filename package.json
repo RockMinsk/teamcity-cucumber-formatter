@@ -31,6 +31,6 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@cucumber/cucumber": ">= 7"
+    "@cucumber/cucumber": ">=7 <10"
   }
 }
