@@ -15,27 +15,51 @@ $ npm install teamcity-cucumber-formatter --save-dev
 
 There are 2 ways to use teamcity-cucumber-formatter as described [here](https://github.com/cucumber/cucumber-js/blob/main/docs/formatters.md)
 
-### 1. On the CLI:
+### 1. On the CLI (Cucumber v.7.0.0 - 9.6.0):
 
 ```sh
 $ cucumber-js --format ./node_modules/teamcity-cucumber-formatter
 ```
 
-### 2. In a configuration file:
+### 2. In a configuration file (Cucumber v.7.0.0 - 9.6.0):
 
 ```javascript
 { format: './node_modules/teamcity-cucumber-formatter' }
 ```
 
+### 3. In a configuration file (Cucumber v.10.0.0+):
+```javascript
+import * as path from 'path';
+import { pathToFileURL } from 'url';
+
+const teamCityModulePath = path.resolve('node_modules', 'teamcity-cucumber-formatter', 'dist', 'teamcity-cucumber-formatter.js');
+const teamCityModuleFilePath = pathToFileURL(teamCityModulePath).href;
+...
+{ format: [`"${teamCityModuleFilePath}"`] }
+```
+
 ### Note:
 If you need to use teamcity-cucumber-formatter only on CI, you can specify it in such way in configuration file:
 
+Cucumber v.7.0.0 - 9.6.0:
 ```javascript
     format: [
         `json:${pathToCucumberJsonReport}`,
         `summary`,
         `progress-bar`,
         ...(process.env.CI ? [path.resolve('node_modules', 'teamcity-cucumber-formatter')] : [])
+    ],
+```
+Cucumber v.10.0.0+:
+```javascript
+    const teamCityModulePath = path.resolve('node_modules', 'teamcity-cucumber-formatter', 'dist', 'teamcity-cucumber-formatter.js');
+    const teamCityModuleFilePath = pathToFileURL(teamCityModulePath).href;
+    
+    format: [
+        `json:${pathToCucumberJsonReport}`,
+        `summary`,
+        `progress-bar`,
+        ...(process.env.CI ? [`"${teamCityModuleFilePath}"`] : [])
     ],
 ```
 
